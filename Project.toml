@@ -12,6 +12,7 @@ FHist = "68837c9b-b678-4cd5-9925-8a54edc8f695"
 LanguageServer = "2b0e0bc5-e4fd-59b4-8912-456d1b03d8d7"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 SymbolServer = "cf896787-08d5-524d-9de7-132aaa0cb996"
+Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 UnROOT = "3cd96dde-e98d-4713-81e9-a4a1b0235ce9"
 
 [compat]
