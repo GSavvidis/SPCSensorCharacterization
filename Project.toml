@@ -1,7 +1,19 @@
 name = "SPCSensorCharacterization"
 authors = ["gsavvidis"]
-[compat]
-julia = "1.10.4"
-DrWatson = "2.16.0"
+
 [deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+Calibrations = "3334b20b-483a-45c4-80b9-4fb237282ba3"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Dictionaries = "85a47980-9c8c-11e8-2b9f-f7ca1fa99fb4"
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+FHist = "68837c9b-b678-4cd5-9925-8a54edc8f695"
+LanguageServer = "2b0e0bc5-e4fd-59b4-8912-456d1b03d8d7"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+SymbolServer = "cf896787-08d5-524d-9de7-132aaa0cb996"
+UnROOT = "3cd96dde-e98d-4713-81e9-a4a1b0235ce9"
+
+[compat]
+DrWatson = "2.16.0"
+julia = "1.10.4"
