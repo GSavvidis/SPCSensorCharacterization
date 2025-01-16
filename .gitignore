@@ -8,6 +8,7 @@
 /plots
 /notebooks
 /_research
+/papers
 /scripts/explore_runs_v2.jl
 /scripts/explore_stability.jl
 /scripts/fit_runs.jl
