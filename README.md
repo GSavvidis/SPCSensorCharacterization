@@ -70,3 +70,14 @@ using DrWatson
 @quickactivate "SPCSensorCharacterization"
 ```
 which auto-activate the project and enable local path handling from DrWatson.
+
+> [!IMPORTANT]
+> To correctly reproduce the project, the local Julia version of the user should
+> be the same with the Julia version used to create the project. To check the
+> Julia version of the project, the user should look at the `Project.toml` file 
+> on the `[compat]` section.
+
+> [!NOTE]
+> For users who don't have Julia installed, it is recommended to install the 
+> [Juliaup](https://github.com/JuliaLang/juliaup) version manager which provides
+> a flexible way for installing and managing julia.
