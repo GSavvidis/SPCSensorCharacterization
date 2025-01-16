@@ -3,7 +3,12 @@
 ################################################################################
 
 # Folders to ignore - files may be too large, too many, etc. NOTE: EDIT IF NEEDED.
-/data
+/data/exp_pro
+/data/exp_raw
+/data/jld2
+/data/logbook
+/data/sims
+/data/T2
 /videos
 /plots
 /notebooks

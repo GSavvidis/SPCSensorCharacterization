@@ -1,0 +1,4 @@
+Runname,ArcTheta (cm),Gas,Pressure (bar),HV0 (V),HV1 (V),Longitude,Anode,Phi,Theta,Nanodes,Comments,ArcThetaErr (cm)
+yj29f018,3,Ar+2%CH4,1,1150,1150,1,S1,0,11.4649681528662,13,-,0.5
+yj29f019,4,Ar+2%CH4,1,1150,1150,1,S1,0,15.2866242038217,13,-,0.5
+yj29f020,5,Ar+2%CH4,1,1150,1150,1,S1,0,19.1082802547771,13,-,0.5
