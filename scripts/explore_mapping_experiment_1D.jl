@@ -35,8 +35,6 @@ transform!(df, :Theta => ByRow( x-> round(Int,x)) => :Theta)
 
 # mask and sort with respect to theta
 mask = (df.Theta .> 0.0) .&& (df.Longitude .== 1)
-# mask = (34 .<= df.Theta .< 92.0) .&& (df.Longitude .<= 2324)
-# logbook_inds = findall(x -> x == true, mask)
 
 map_logbook = construct_logbook(
     df[mask, :],

@@ -57,3 +57,41 @@ function filterdir(path_to_dir;
 
     return filtered_files
 end
+
+"""
+    get_uniques(files::Vector, regex::Regex)
+    get_uniques(files::Vector, varname::String)
+"""
+function get_uniques(files::Vector, regex::Regex)
+
+    vals = Vector{Int}(undef, length(files))
+
+    for i in eachindex(files)
+        file = files[i]
+        str_value = match(regex, file).captures[1]
+        value = parse(Int, str_value)
+        vals[i] = value
+    end
+
+    uniques = unique(vals)
+
+    return uniques
+
+end
+
+function get_uniques(files::Vector, jlddir::String, varname::String)
+
+    vals = Vector{Int}(undef, length(files))
+
+    for i in eachindex(files)
+        file = files[i]
+        jldopen(file, "r") do f
+            vals[i] = f[jlddir][varname]
+        end
+    end
+
+    uniques = unique(vals)
+
+    return uniques
+
+end

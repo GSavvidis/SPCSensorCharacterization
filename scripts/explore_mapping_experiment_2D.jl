@@ -7,6 +7,7 @@ more specifically to mapping data (spatial calibration).
 A facet plot is created with the rows and columns of the
 facet corresponding to a 2D histogram.
 """
+
 using DrWatson
 quickactivate(@__DIR__)
 
@@ -18,14 +19,16 @@ using FHist
 using Dictionaries
 
 using Calibrations
-# using AnalysisUtils
 
 using CairoMakie
 
 # using JLD2
 
 # setup logbook
-df =  CSV.read(datadir("logbook/0.25mm_13anodes_bakelite/mapping/3channels/mapping7_updated.csv"), DataFrame)
+df =  CSV.read(
+    datadir("testdata/logbook/mapping5.csv"),
+    DataFrame
+)
 rename!(df, "ArcTheta (cm)" => "ArcTheta")
 
 # round theta angle
@@ -35,18 +38,16 @@ transform!(df, :Theta => ByRow( x-> round(Int,x)) => :Theta)
 # logbook[!, :Theta] = @. round(Int, (logbook.ArcTheta / 15) * (180/π))
 
 # mask and sort with respect to theta
-mask = (df.Theta .> 0.0) .&& (df.Longitude .<= 2324)
-# mask = (34 .<= df.Theta .< 92.0) .&& (df.Longitude .<= 2324)
-# logbook_inds = findall(x -> x == true, mask)
+mask = (df.Theta .> 0.0) .&& (df.Longitude .== 1)
 
 map_logbook = construct_logbook(
     df[mask, :],
     :Runname,
-    (θ=:Theta, ϕ=:Phi3, longitude=:Longitude, anode=:Anode)
+    (θ=:Theta, ϕ=:Phi, longitude=:Longitude, anode=:Anode)
 )
 
 # configurations
-path_to_data = datadir("T2/0.25mm_13ball_bak/mapping7/")
+path_to_data = datadir("testdata/T2/")
 suffix = "_DD2_fixedstartend_q00.root"
 treename = "T2"
 branches = ["DD_RawAmpl", "DD_RawRise", "Channel", "TimeS", "DD_RawWidth"]
@@ -84,9 +85,9 @@ xcuts_vec = nothing
 hist2d_config = MappingHist2DConfig(
     :DD_RawAmpl,
     :DD_RawRise;
-    channels=[0],
+    channels=[1],
     binedges=[(bin_edges[:DD_RawAmpl], bin_edges[:DD_RawRise])],
-    cuts=[cuts0]
+    cuts=[cuts1]
 )
 
 experiment = construct_experiment(map_logbook, hist2d_config, root_config)

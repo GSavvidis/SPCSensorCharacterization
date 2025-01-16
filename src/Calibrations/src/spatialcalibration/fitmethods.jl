@@ -82,6 +82,7 @@ function fit_model_to_data(
 end
 
 # TODO: Implement an additional config for saving the result of the fit
+# including the savedir and the name of the file
 """
     fit_experiment(
         e::MappingExperiment,
@@ -97,7 +98,8 @@ The result is saved in a jld2 file for later analysis.
 function fit_experiment(
     e::MappingExperiment,
     modelconfig::HistModelConfig,
-    mcmcconfig::MCMCConfig
+    mcmcconfig::MCMCConfig;
+    savedir::String=DrWatson.datadir()
     )
 
     # loop through the runs
@@ -145,7 +147,6 @@ function fit_experiment(
             "model=$(modelconfig.modelname)" *
             ".jld2"
 
-        savedir = datadir("jld2/0.25mm_13ball_bak/mapping_fits/mapping6/")
         jldsave(savedir*filename, MappingRunFitResults = run_result)
 
         # wsave(

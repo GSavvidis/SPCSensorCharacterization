@@ -1,4 +1,10 @@
 
+"""
+This script is meant to be used to fit the mapping data
+using Turing. The results are saved as .jld2 files in
+the datadir.
+"""
+
 using DrWatson
 quickactivate(@__DIR__)
 
@@ -15,10 +21,12 @@ using CairoMakie
 
 using Turing
 
-# using JLD2
 
 # setup logbook
-df =  CSV.read(datadir("logbook/0.25mm_13anodes_bakelite/mapping/3channels/mapping6.csv"), DataFrame)
+df =  CSV.read(
+    datadir("testdata/logbook/mapping5.csv"),
+    DataFrame
+)
 DataFrames.rename!(df, "ArcTheta (cm)" => "ArcTheta")
 # round theta angle
 DataFrames.transform!(df, :Theta => ByRow( x-> round(Int,x)) => :Theta)
@@ -27,13 +35,16 @@ DataFrames.transform!(df, :Theta => ByRow( x-> round(Int,x)) => :Theta)
 # logbook[!, :Theta] = @. round(Int, (logbook.ArcTheta / 15) * (180/π))
 
 # mask and sort with respect to theta
-mask = (df.Theta .< 100.0) .&& (df.Longitude .<= 2324)
-# logbook_inds = findall(x -> x == true, mask)
+mask = (df.Theta .< 100.0) .&& (df.Longitude .<= 1)
 
-map_logbook = construct_logbook(df[mask, :])
+map_logbook = construct_logbook(
+    df[mask, :],
+    :Runname,
+    (θ=:Theta, ϕ=:Phi, longitude=:Longitude, anode=:Anode)
+)
 
 # configurations
-path_to_data = datadir("T2/0.25mm_13ball_bak/mapping6/")
+path_to_data = datadir("testdata/T2/")
 suffix = "_DD2_fixedstartend_q00.root"
 treename = "T2"
 branches = ["DD_RawAmpl", "DD_RawRise", "Channel", "TimeS", "DD_RawWidth"]
@@ -51,32 +62,18 @@ bin_edges = Dictionary(Dict(:DD_RawAmpl => x_lower:200:x_upper,
 # cuts
 cuts0 = x -> (x_lower .< x[:DD_RawAmpl] .< x_upper) .&& x[:Channel] .== 0
 cuts1 = x -> (x_lower .< x[:DD_RawAmpl] .< x_upper) .&& x[:Channel] .== 1
-cuts2 = x -> (x_lower .< x[:DD_RawAmpl] .< x_upper) .&& x[:Channel] .== 2
 xcuts_vec = nothing
 
 # configuration for 1D histogram
 hist1d_config = MappingHist1DConfig(
     :DD_RawAmpl,
-    channels=[0, 1, 2],
+    channels=[0, 1],
     binedges=[bin_edges[:DD_RawAmpl], bin_edges[:DD_RawAmpl], bin_edges[:DD_RawAmpl]];
-    cuts=[cuts0, cuts1, cuts2]
+    cuts=[cuts0, cuts1]
 )
 
 
 experiment = construct_experiment(map_logbook, hist1d_config, root_config)
-
-# cf = let
-#     function config(event::UnROOT.LazyEvent)
-#         mask0 = event[:DD_RawAmpl] .< 5_000 .&& event[:Channel] .== 0
-#         mask1 = event[:DD_RawAmpl] .< 5_000 .&& event[:Channel] .== 1
-
-#         if any(mask0) .&& any(mask1)
-#             var = event[:DD_RawAmpl][mask0] / event[:DD_RawAmpl][mask1]
-#             return var
-#         end
-#     end
-
-# end
 
 # model configuration
 histmodel = HistModelConfig(
@@ -94,16 +91,5 @@ mcmcconfig = MCMCConfig(
     samplekwargs=(discard_initial=50,)
 )
 
-#
-fit_experiment(experiment, histmodel, mcmcconfig)
-
-
-# var = event -> event[:DD_RawAmpl][submask0(event)] + event[:DD_RawAmpl][submask1(event)]
-
-# histconf = Hist2DConfig((0:1:100))
-
-# h = construct_hist(lzconfs[1], histconf, config)
-
-# cuts = event -> ((x_lower .< event[:DD_RawAmpl] .< x_upper) .&&
-#     event[:Channel] .== 0) .||
-#     (event[:DD_RawAmpl] .> 0 .&& event[:Channel] .== 1)
+# Fits the data. Result is saved as .jld2 file in the datadir
+fit_experiment(experiment, histmodel, mcmcconfig; savedir=datadir("testdata/jld2/"))

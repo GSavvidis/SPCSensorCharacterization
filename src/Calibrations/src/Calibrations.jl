@@ -85,7 +85,8 @@ export
 include("spatialcalibration/fitmethods.jl")
 
 export
-    filterdir
+    filterdir,
+    get_uniques
 
 include("utils/loadutils.jl")
 
